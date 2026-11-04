@@ -4,6 +4,7 @@ from sklearn.dummy import DummyClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import FunctionTransformer, OneHotEncoder, StandardScaler
+from sklearn.tree import DecisionTreeClassifier
 
 CAT_COLS = ["EDUCATION", "PAY_0", "PAY_2", "PAY_3", "PAY_4", "PAY_5", "PAY_6"]
 MONEY_COLS = (
@@ -31,3 +32,8 @@ def build_logreg(C = 1.0):
         ]), MONEY_COLS),
     ])
     return Pipeline([("prep", prep), ("model", LogisticRegression(C = C, max_iter = 1000))])
+
+def build_tree(max_depth = None, min_samples_leaf = 1):
+    return DecisionTreeClassifier(
+        max_depth = max_depth, min_samples_leaf = min_samples_leaf, random_state = 42
+    )
