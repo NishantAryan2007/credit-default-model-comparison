@@ -6,6 +6,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import FunctionTransformer, OneHotEncoder, StandardScaler
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
+from xgboost import XGBClassifier
 
 CAT_COLS = ["EDUCATION", "PAY_0", "PAY_2", "PAY_3", "PAY_4", "PAY_5", "PAY_6"]
 MONEY_COLS = (
@@ -45,3 +46,11 @@ def build_forest(n_estimators = 300, max_depth = None, min_samples_leaf = 1):
         min_samples_leaf = min_samples_leaf, n_jobs = -1, random_state = 42,
     )
 # n_estimators is the number of trees. n_jobs = -1 uses all the CPU cores, so it runs faster.
+
+def build_xgb(n_estimators = 200, max_depth = 3, learning_rate = 0.1):
+    return XGBClassifier(
+        n_estimators = n_estimators, max_depth = max_depth,
+        learning_rate = learning_rate, eval_metric = "logloss",
+        n_jobs = -1, random_state = 42,
+    )
+# eval_metric = "logloss" is just the score XGBoost tracks internally.
