@@ -5,6 +5,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import FunctionTransformer, OneHotEncoder, StandardScaler
 from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
 
 CAT_COLS = ["EDUCATION", "PAY_0", "PAY_2", "PAY_3", "PAY_4", "PAY_5", "PAY_6"]
 MONEY_COLS = (
@@ -37,3 +38,10 @@ def build_tree(max_depth = None, min_samples_leaf = 1):
     return DecisionTreeClassifier(
         max_depth = max_depth, min_samples_leaf = min_samples_leaf, random_state = 42
     )
+
+def build_forest(n_estimators = 300, max_depth = None, min_samples_leaf = 1):
+    return RandomForestClassifier(
+        n_estimators = n_estimators, max_depth = max_depth,
+        min_samples_leaf = min_samples_leaf, n_jobs = -1, random_state = 42,
+    )
+# n_estimators is the number of trees. n_jobs = -1 uses all the CPU cores, so it runs faster.
