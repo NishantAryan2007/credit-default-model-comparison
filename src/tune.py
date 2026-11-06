@@ -1,5 +1,6 @@
 import json
 import time
+from pathlib import Path
 
 import pandas as pd
 from sklearn.model_selection import (
@@ -17,6 +18,17 @@ def plain(v):
     """Turn numpy numbers into normal Python numbers so JSON can save them."""
     return v.item() if hasattr(v, "item") else v
 
+def load_tuned_models():
+    """Rebuild each model with the best settings saved by the tuning run."""
+    path = Path(__file__).resolve().parent.parent / "artifacts" / "tuning_results.json"
+    with open(path) as f:
+        results = json.load(f)
+    models = {}
+    for name, (builder, _) in SEARCH_SPACES.items():
+        model = builder()
+        model.set_params(**results[name]["best_params"])
+        models[name] = model
+    return models
 
 if __name__ == "__main__":
     train = pd.read_csv("data/processed/train.csv")
