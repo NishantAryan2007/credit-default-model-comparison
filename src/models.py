@@ -7,6 +7,7 @@ from sklearn.preprocessing import FunctionTransformer, OneHotEncoder, StandardSc
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 from xgboost import XGBClassifier
+from scipy.stats import loguniform, randint, uniform
 
 CAT_COLS = ["EDUCATION", "PAY_0", "PAY_2", "PAY_3", "PAY_4", "PAY_5", "PAY_6"]
 MONEY_COLS = (
@@ -54,3 +55,28 @@ def build_xgb(n_estimators = 200, max_depth = 3, learning_rate = 0.1):
         n_jobs = -1, random_state = 42,
     )
 # eval_metric = "logloss" is just the score XGBoost tracks internally.
+
+#*****************************************************************************
+
+# Each model gets the same search budget. Ranges are chosen from what we saw:
+# forests like big leaves, XGBoost likes small trees and slow learning.
+SEARCH_SPACES = {
+    "Logistic Regression": (
+        build_logreg,
+        {"model__C": loguniform(1e-3, 1e2)},
+    ),
+    "Decision Tree": (
+        build_tree,
+        {"max_depth": randint(2, 12), "min_samples_leaf": randint(5, 200)},
+    ),
+    "Random Forest": (
+        lambda: build_forest(n_estimators=200),
+        {"max_depth": randint(5, 20), "min_samples_leaf": randint(20, 150),
+         "max_features": ["sqrt", 0.5]},
+    ),
+    "XGBoost": (
+        build_xgb,
+        {"n_estimators": randint(100, 600), "max_depth": randint(2, 6),
+         "learning_rate": loguniform(0.01, 0.2), "subsample": uniform(0.6, 0.4)},
+    ),
+}
