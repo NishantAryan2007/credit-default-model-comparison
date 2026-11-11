@@ -66,3 +66,31 @@ def load_random_customer():
 
 def current_row():
     return {k: int(st.session_state[k]) for k in FEATURES}
+
+@st.cache_data
+def load_disagreements():
+    """Test customers where at least one model flags and at least one does not.
+    Sorted by probability spread (biggest gap first)."""
+    d = pd.read_csv(ROOT / "artifacts" / "test_predictions.csv")
+    m = d[list(MODEL_FILES)]
+    f = m >= THRESHOLD
+    mask = f.any(axis=1) & ~f.all(axis=1)
+    out = m[mask].copy()
+    out["spread"] = out.max(axis=1) - out.min(axis=1)
+    return out.sort_values("spread", ascending=False)
+
+
+def load_customer(i):
+    """Copy test customer number i into the input boxes."""
+    X, y = load_test()
+    row = {k: int(X.iloc[i][k]) for k in FEATURES}
+    for k, (lo, hi) in LIMITS.items():
+        row[k] = min(max(row[k], lo), hi)
+    st.session_state.update(row)
+    st.session_state["loaded"] = {"row": row, "actual": int(y.iloc[i]), "index": i}
+
+
+def load_disagreement_customer(top_n=300):
+    """Button callback: pick a random customer from the top_n biggest disagreements."""
+    dis = load_disagreements().head(top_n)
+    load_customer(int(random.choice(list(dis.index))))
