@@ -1,0 +1,74 @@
+{
+  "threshold": 0.16666666666666666,
+  "results": {
+    "Dummy": {
+      "roc_auc": 0.5,
+      "average_precision": 0.2212,
+      "log_loss": 0.5284,
+      "brier": 0.1723,
+      "precision": 0.2212,
+      "recall": 1.0,
+      "f1": 0.3622,
+      "accuracy": 0.2212,
+      "cost": 0.7788,
+      "fit_seconds": 0.05,
+      "predict_seconds": 0.001
+    },
+    "Logistic Regression": {
+      "roc_auc": 0.7614,
+      "average_precision": 0.5283,
+      "log_loss": 0.4408,
+      "brier": 0.1382,
+      "precision": 0.3904,
+      "recall": 0.7084,
+      "f1": 0.5033,
+      "accuracy": 0.6908,
+      "cost": 0.5672,
+      "fit_seconds": 0.26,
+      "predict_seconds": 0.019,
+      "file_mb": 0.0
+    },
+    "Decision Tree": {
+      "roc_auc": 0.7604,
+      "average_precision": 0.5268,
+      "log_loss": 0.4423,
+      "brier": 0.1386,
+      "precision": 0.3489,
+      "recall": 0.7332,
+      "f1": 0.4728,
+      "accuracy": 0.6383,
+      "cost": 0.5977,
+      "fit_seconds": 0.35,
+      "predict_seconds": 0.016,
+      "file_mb": 0.01
+    },
+    "Random Forest": {
+      "roc_auc": 0.776,
+      "average_precision": 0.5527,
+      "log_loss": 0.431,
+      "brier": 0.1352,
+      "precision": 0.3732,
+      "recall": 0.734,
+      "f1": 0.4948,
+      "accuracy": 0.6685,
+      "cost": 0.5668,
+      "fit_seconds": 2.57,
+      "predict_seconds": 0.095,
+      "file_mb": 2.05
+    },
+    "XGBoost": {
+      "roc_auc": 0.7781,
+      "average_precision": 0.5561,
+      "log_loss": 0.4305,
+      "brier": 0.1352,
+      "precision": 0.3822,
+      "recall": 0.7204,
+      "f1": 0.4995,
+      "accuracy": 0.6807,
+      "cost": 0.5667,
+      "fit_seconds": 2.59,
+      "predict_seconds": 0.011,
+      "file_mb": 0.23
+    }
+  }
+}
