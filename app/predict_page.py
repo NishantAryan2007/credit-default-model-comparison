@@ -11,7 +11,23 @@ def render():
     models = load_models()
 
     st.header("Predict default risk")
-    st.caption("Enter one customer's details. The result updates as you type.")
+    st.caption(
+        "Four models, one question: will a credit-card customer miss next month's payment? "
+        "Portfolio demo on 2005 Taiwan data, not lending advice."
+    )
+    with st.expander("About this app and what the inputs mean"):
+        st.markdown(
+            "This app compares logistic regression, a decision tree, a random forest and XGBoost on "
+            "30,000 credit-card customers from Taiwan in 2005. Enter a customer, or load a real test "
+            "customer, and the result updates as you type. Use the sidebar to compare models and see "
+            "how they were evaluated.\n\n"
+            "- **Credit limit**: the card limit in New Taiwan dollars.\n"
+            "- **Repayment status**: one value per month, latest first. -2 means no card use, -1 paid "
+            "in full, 0 paid the minimum, 1 or more means that many months late.\n"
+            "- **Bill amounts**: the statement balance each month.\n"
+            "- **Payment amounts**: how much the customer paid each month.\n"
+            "- Sex, age and marital status are not used by the models."
+        )
 
     left, right = st.columns([3, 2], gap="large")
 
