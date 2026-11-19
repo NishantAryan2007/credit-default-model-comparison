@@ -1,0 +1,52 @@
+{
+  "n_boot": 1000,
+  "auc_ci": {
+    "Logistic Regression": [
+      0.7614,
+      0.7464,
+      0.7776
+    ],
+    "Decision Tree": [
+      0.7604,
+      0.7441,
+      0.7768
+    ],
+    "Random Forest": [
+      0.776,
+      0.7612,
+      0.7916
+    ],
+    "XGBoost": [
+      0.7781,
+      0.7638,
+      0.7935
+    ]
+  },
+  "diff_ci": {
+    "XGBoost - Random Forest": [
+      0.0021,
+      -0.0018,
+      0.006
+    ],
+    "XGBoost - Logistic Regression": [
+      0.0166,
+      0.0101,
+      0.0228
+    ],
+    "Random Forest - Logistic Regression": [
+      0.0145,
+      0.0072,
+      0.0221
+    ],
+    "XGBoost - Decision Tree": [
+      0.0176,
+      0.0105,
+      0.0245
+    ],
+    "Logistic Regression - Decision Tree": [
+      0.001,
+      -0.008,
+      0.01
+    ]
+  }
+}
