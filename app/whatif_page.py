@@ -1,9 +1,8 @@
 import altair as alt
-import numpy as np
 import pandas as pd
 import streamlit as st
 
-from common import (EDU, FEATURES, LIMITS, MODEL_FILES, THRESHOLD, current_row,
+from common import (FEATURES, LABELS, LIMITS, MODEL_FILES, THRESHOLD, current_row,
                     init_state, load_models, load_random_customer)
 
 NAMES = list(MODEL_FILES)
@@ -36,7 +35,9 @@ def render():
                "and see how each model's predicted risk responds.")
 
     top = st.columns([2, 1, 3])
-    feature = top[0].selectbox("Feature to vary", list(SWEEP), key="sweep_feature")
+    feature = top[0].selectbox("Feature to vary", list(SWEEP), format_func=LABELS.get,
+                               key="sweep_feature")
+    label = LABELS[feature]
     top[1].markdown("&nbsp;")
     top[1].button("Random test customer", on_click=load_random_customer, width="stretch")
 
@@ -58,7 +59,7 @@ def render():
         base = alt.Chart(df)
         if feature in DISCRETE:
             lines = base.mark_line(point=True).encode(
-                x=alt.X("Value:O", title=feature),
+                x=alt.X("Value:O", title=label),
                 y=alt.Y("Risk:Q", scale=alt.Scale(domain=[0, 1]), axis=alt.Axis(format="%"),
                         title="Predicted risk"),
                 color=alt.Color("Model:N", scale=COLOR, legend=alt.Legend(title=None, orient="bottom")),
@@ -68,7 +69,7 @@ def render():
             chart = lines + cutoff
         else:
             lines = base.mark_line().encode(
-                x=alt.X("Value:Q", title=feature),
+                x=alt.X("Value:Q", title=label),
                 y=alt.Y("Risk:Q", scale=alt.Scale(domain=[0, 1]), axis=alt.Axis(format="%"),
                         title="Predicted risk"),
                 color=alt.Color("Model:N", scale=COLOR, legend=alt.Legend(title=None, orient="bottom")),
@@ -80,7 +81,7 @@ def render():
             chart = lines + cutoff + here
         st.altair_chart(chart.properties(height=400), width="stretch")
         st.caption(f"Dashed horizontal line = cutoff ({THRESHOLD:.1%}). "
-                   f"Current customer's {feature} = {current:,}"
+                   f"Current customer's value for \"{label}\" = {current:,}"
                    + (" (dotted vertical line)." if feature not in DISCRETE else "."))
 
     with right:

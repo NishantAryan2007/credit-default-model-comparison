@@ -2,9 +2,10 @@ import altair as alt
 import pandas as pd
 import streamlit as st
 
-from common import (BILL_COLS, EDU, LIMITS, MODEL_FILES, PAY_COLS, PAYAMT_COLS,
-                    THRESHOLD, current_row, init_state, load_disagreement_customer,
-                    load_models, load_random_customer)
+from common import (BILL_COLS, EDU, LABELS, LIMITS, MODEL_FILES, MONTH, PAY_COLS,
+                    PAYAMT_COLS, THRESHOLD, current_row, init_state,
+                    load_disagreement_customer, load_models, load_random_customer,
+                    range_warnings)
 
 
 def render():
@@ -50,17 +51,19 @@ def render():
 
         with st.expander("Edit customer inputs"):
             a, b = st.columns(2)
-            a.number_input("Credit limit (NT$)", *LIMITS["LIMIT_BAL"], step=10_000, key="LIMIT_BAL")
-            b.selectbox("Education", list(EDU), format_func=EDU.get, key="EDUCATION")
+            a.number_input(LABELS["LIMIT_BAL"], *LIMITS["LIMIT_BAL"], step=10_000, key="LIMIT_BAL")
+            b.selectbox(LABELS["EDUCATION"], list(EDU), format_func=EDU.get, key="EDUCATION")
+            st.caption("Repayment status: -2 = no usage, -1 = paid in full, 0 = paid minimum, "
+                       "1 or more = months late")
             cols = st.columns(6)
-            for c, name in zip(cols, PAY_COLS):
-                c.number_input(name, *LIMITS[name], key=name)
+            for c, name, month in zip(cols, PAY_COLS, MONTH):
+                c.number_input(f"Status, {month.lower()}", *LIMITS[name], key=name)
             cols = st.columns(6)
-            for i, name in enumerate(BILL_COLS):
-                cols[i].number_input(name, *LIMITS[name], step=1000, key=name)
+            for c, name, month in zip(cols, BILL_COLS, MONTH):
+                c.number_input(f"Bill, {month.lower()}", *LIMITS[name], step=1000, key=name)
             cols = st.columns(6)
-            for i, name in enumerate(PAYAMT_COLS):
-                cols[i].number_input(name, *LIMITS[name], step=500, key=name)
+            for c, name, month in zip(cols, PAYAMT_COLS, MONTH):
+                c.number_input(f"Payment, {month.lower()}", *LIMITS[name], step=500, key=name)
 
     with right:
         with st.container(border=True):
@@ -78,6 +81,12 @@ def render():
             st.dataframe(table, hide_index=True, width="stretch")
             st.metric("Gap between highest and lowest",
                       f"{(max(probs.values()) - min(probs.values())) * 100:.1f} points")
+
+            notes = range_warnings(row)
+            if notes:
+                with st.expander(f"Unusual inputs ({len(notes)}): disagreement may be larger here"):
+                    for n in notes:
+                        st.write("- " + n)
 
             loaded = st.session_state.get("loaded")
             if loaded and loaded["row"] == row:

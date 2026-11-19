@@ -25,6 +25,13 @@ BILL_COLS = [f"BILL_AMT{i}" for i in range(1, 7)]
 PAYAMT_COLS = [f"PAY_AMT{i}" for i in range(1, 7)]
 FEATURES = ["LIMIT_BAL", "EDUCATION"] + PAY_COLS + BILL_COLS + PAYAMT_COLS
 
+# Readable names. The data's own naming is odd (PAY_0 then PAY_2), so we map by position.
+MONTH = ["Latest", "1 mo ago", "2 mo ago", "3 mo ago", "4 mo ago", "5 mo ago"]
+LABELS = {"LIMIT_BAL": "Credit limit (NT$)", "EDUCATION": "Education"}
+LABELS.update({c: f"Repayment status, {m.lower()}" for c, m in zip(PAY_COLS, MONTH)})
+LABELS.update({c: f"Bill, {m.lower()} (NT$)" for c, m in zip(BILL_COLS, MONTH)})
+LABELS.update({c: f"Payment, {m.lower()} (NT$)" for c, m in zip(PAYAMT_COLS, MONTH)})
+
 # Allowed range for each input. Loaded customers are clamped into these.
 LIMITS = {"LIMIT_BAL": (10_000, 1_000_000), "EDUCATION": (1, 4)}
 LIMITS.update({c: (-2, 8) for c in PAY_COLS})
@@ -48,6 +55,33 @@ def load_test():
     return split_xy(pd.read_csv(ROOT / "data" / "processed" / "test.csv"))
 
 
+@st.cache_data
+def load_ranges():
+    """What is 'typical', measured on the training set only."""
+    X, _ = split_xy(pd.read_csv(ROOT / "data" / "processed" / "train.csv"))
+    money = ["LIMIT_BAL"] + BILL_COLS + PAYAMT_COLS
+    ranges = {c: (float(X[c].quantile(0.01)), float(X[c].quantile(0.99))) for c in money}
+    common_vals = {}
+    for c in PAY_COLS:
+        counts = X[c].value_counts()
+        common_vals[c] = {int(v) for v in counts[counts >= 100].index}
+    return ranges, common_vals
+
+
+def range_warnings(row):
+    """List of plain-English notes for inputs the models rarely saw in training."""
+    ranges, common_vals = load_ranges()
+    notes = []
+    for c, (lo, hi) in ranges.items():
+        if not lo <= row[c] <= hi:
+            notes.append(f"{LABELS[c]} is {row[c]:,}, outside the typical range "
+                         f"({lo:,.0f} to {hi:,.0f}).")
+    for c in PAY_COLS:
+        if row[c] not in common_vals[c]:
+            notes.append(f"{LABELS[c]} is {row[c]}, a value that is rare in the training data.")
+    return notes
+
+
 def init_state():
     for k, v in DEFAULTS.items():
         st.session_state.setdefault(k, v)
@@ -66,6 +100,7 @@ def load_random_customer():
 
 def current_row():
     return {k: int(st.session_state[k]) for k in FEATURES}
+
 
 @st.cache_data
 def load_disagreements():
