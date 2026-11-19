@@ -1,0 +1,30 @@
+{
+  "n_split": 1494,
+  "default_rate_split": 0.1593,
+  "models": {
+    "Logistic Regression": {
+      "accuracy": 0.6265,
+      "cost": 0.7671,
+      "alone": 338,
+      "alone_and_right": 168
+    },
+    "Decision Tree": {
+      "accuracy": 0.4157,
+      "cost": 0.8896,
+      "alone": 574,
+      "alone_and_right": 174
+    },
+    "Random Forest": {
+      "accuracy": 0.5368,
+      "cost": 0.7657,
+      "alone": 97,
+      "alone_and_right": 43
+    },
+    "XGBoost": {
+      "accuracy": 0.5857,
+      "cost": 0.7651,
+      "alone": 89,
+      "alone_and_right": 41
+    }
+  }
+}
