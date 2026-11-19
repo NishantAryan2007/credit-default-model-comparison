@@ -114,7 +114,7 @@ def overview_tab(test, dis, boot):
     color = alt.Color(
         "Result:N",
         scale=alt.Scale(domain=["Clear difference", "Too close to call"], range=["#1F4E79", "#9AA5B1"]),
-        legend=alt.Legend(title=None, orient="bottom"),
+        legend=alt.Legend(title = None, orient = "bottom"),
     )
     base = alt.Chart(diff).encode(
         y=alt.Y("Comparison:N", sort=order, title=None, axis=alt.Axis(labelLimit=320)))

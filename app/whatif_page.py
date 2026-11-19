@@ -6,7 +6,7 @@ from common import (FEATURES, LABELS, LIMITS, MODEL_FILES, THRESHOLD, current_ro
                     init_state, load_models, load_random_customer)
 
 NAMES = list(MODEL_FILES)
-COLOR = alt.Scale(domain=NAMES, range=["#1F4E79", "#E67E22", "#27AE60", "#C0392B"])
+COLOR = alt.Scale(domain=NAMES, range = ["#1F4E79", "#E67E22", "#27AE60", "#C0392B"])
 
 # Sweep ranges: a sensible window, not the full input limits (those are too wide to read).
 SWEEP = {
@@ -35,11 +35,11 @@ def render():
                "and see how each model's predicted risk responds.")
 
     top = st.columns([2, 1, 3])
-    feature = top[0].selectbox("Feature to vary", list(SWEEP), format_func=LABELS.get,
+    feature = top[0].selectbox("Feature to vary", list(SWEEP), format_func = LABELS.get,
                                key="sweep_feature")
     label = LABELS[feature]
     top[1].markdown("&nbsp;")
-    top[1].button("Random test customer", on_click=load_random_customer, width="stretch")
+    top[1].button("Random test customer", on_click = load_random_customer, width = "stretch")
 
     row = current_row()
     values = SWEEP[feature]
@@ -60,9 +60,9 @@ def render():
         if feature in DISCRETE:
             lines = base.mark_line(point=True).encode(
                 x=alt.X("Value:O", title=label),
-                y=alt.Y("Risk:Q", scale=alt.Scale(domain=[0, 1]), axis=alt.Axis(format="%"),
-                        title="Predicted risk"),
-                color=alt.Color("Model:N", scale=COLOR, legend=alt.Legend(title=None, orient="bottom")),
+                y=alt.Y("Risk:Q", scale = alt.Scale(domain = [0, 1]), axis = alt.Axis(format = "%"),
+                        title = "Predicted risk"),
+                color=alt.Color("Model:N", scale = COLOR, legend = alt.Legend(title = None, orient = "bottom")),
             )
             cutoff = alt.Chart(pd.DataFrame({"y": [THRESHOLD]})).mark_rule(
                 color="black", strokeDash=[5, 4]).encode(y="y:Q")
@@ -75,9 +75,9 @@ def render():
                 color=alt.Color("Model:N", scale=COLOR, legend=alt.Legend(title=None, orient="bottom")),
             )
             cutoff = alt.Chart(pd.DataFrame({"y": [THRESHOLD]})).mark_rule(
-                color="black", strokeDash=[5, 4]).encode(y="y:Q")
+                color = "black", strokeDash = [5, 4]).encode(y = "y:Q")
             here = alt.Chart(pd.DataFrame({"x": [current]})).mark_rule(
-                color="gray", strokeDash=[2, 3]).encode(x="x:Q")
+                color = "gray", strokeDash = [2, 3]).encode(x = "x:Q")
             chart = lines + cutoff + here
         st.altair_chart(chart.properties(height=400), width="stretch")
         st.caption(f"Dashed horizontal line = cutoff ({THRESHOLD:.1%}). "

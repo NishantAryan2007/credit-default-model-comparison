@@ -29,32 +29,32 @@ def render():
             "- Sex, age and marital status are not used by the models."
         )
 
-    left, right = st.columns([3, 2], gap="large")
+    left, right = st.columns([3, 2], gap = "large")
 
     with left:
         tab1, tab2, tab3 = st.tabs(["Profile and repayment", "Bill amounts", "Payment amounts"])
         with tab1:
             a, b = st.columns(2)
-            a.number_input(LABELS["LIMIT_BAL"], *LIMITS["LIMIT_BAL"], step=10_000, key="LIMIT_BAL")
-            b.selectbox(LABELS["EDUCATION"], list(EDU), format_func=EDU.get, key="EDUCATION")
+            a.number_input(LABELS["LIMIT_BAL"], *LIMITS["LIMIT_BAL"], step = 10_000, key = "LIMIT_BAL")
+            b.selectbox(LABELS["EDUCATION"], list(EDU), format_func = EDU.get, key = "EDUCATION")
             st.markdown("**Repayment status by month**")
             st.caption("-2 = no usage, -1 = paid in full, 0 = paid minimum, 1 or more = months late")
             cols = st.columns(6)
             for c, name, month in zip(cols, PAY_COLS, MONTH):
-                c.number_input(month, *LIMITS[name], key=name)
+                c.number_input(month, *LIMITS[name], key = name)
         with tab2:
             cols = st.columns(3)
             for i, (name, month) in enumerate(zip(BILL_COLS, MONTH)):
-                cols[i % 3].number_input(f"Bill, {month.lower()}", *LIMITS[name], step=1000, key=name)
+                cols[i % 3].number_input(f"Bill, {month.lower()}", *LIMITS[name], step = 1000, key = name)
         with tab3:
             cols = st.columns(3)
             for i, (name, month) in enumerate(zip(PAYAMT_COLS, MONTH)):
-                cols[i % 3].number_input(f"Payment, {month.lower()}", *LIMITS[name], step=500, key=name)
+                cols[i % 3].number_input(f"Payment, {month.lower()}", *LIMITS[name], step = 500, key = name)
 
     with right:
         with st.container(border=True):
-            model_name = st.selectbox("Model", list(MODEL_FILES), key="model_choice")
-            st.button("Load a random test customer", on_click=load_random_customer, width="stretch")
+            model_name = st.selectbox("Model", list(MODEL_FILES), key = "model_choice")
+            st.button("Load a random test customer", on_click = load_random_customer, width = "stretch")
 
             row = current_row()
             p = models[model_name].predict_proba(pd.DataFrame([row]))[0, 1]
