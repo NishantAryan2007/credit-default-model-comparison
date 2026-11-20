@@ -74,7 +74,12 @@ pip install -r requirements.txt
 streamlit run app/streamlit_app.py
 ```
 
-Tests: `python -m pytest -q`
+Tests and reproducing the results need extra packages:
+
+```
+pip install -r requirements-dev.txt
+python -m pytest -q
+```
 
 Reproduce the results (overwrites `artifacts/`):
 
