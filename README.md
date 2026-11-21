@@ -2,9 +2,15 @@
 
 An interactive Streamlit app that runs the same credit-card customer through four machine-learning models and shows where they agree, where they disagree, and how they were evaluated.
 
-**Live demo:** _link added after deployment_
+**Live demo:** [credit-default-models.streamlit.app](https://credit-default-models.streamlit.app/)
 
-<!-- Screenshots go here after deployment (save them in docs/) -->
+![Compare models](docs/compare.png)
+
+![What-if sweep](docs/whatif.png)
+
+![Model performance](docs/performance.png)
+
+![How the models work](docs/overview.png)
 
 ## Overview
 
