@@ -112,3 +112,7 @@ tests/                 pytest checks
 requirements.txt       app dependencies
 requirements-dev.txt   tests, notebooks, data download
 ```
+
+## License
+
+Code is released under the MIT License. The dataset is governed by its own terms on the UCI page.
