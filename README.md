@@ -16,7 +16,7 @@ An interactive Streamlit app that runs the same credit-card customer through fou
 
 **Question:** will a credit-card customer miss next month's payment?
 
-**Data:** [UCI Default of Credit Card Clients](https://archive.ics.uci.edu/dataset/350/default+of+credit+card+clients): 30,000 customers, Taiwan, 2005, about 22% default. See the dataset page for its license and citation terms. Stratified 80/20 split (24,000 train, 6,000 test). The test set was locked away before exploration and used for a single final evaluation. Later analyses reuse those saved predictions, and nothing was tuned on it.
+**Data:** [UCI Default of Credit Card Clients](https://archive.ics.uci.edu/dataset/350/default+of+credit+card+clients): 30,000 customers, Taiwan, 2005, about 22% default. Licensed CC BY 4.0, see License and data credit below. Stratified 80/20 split (24,000 train, 6,000 test). The test set was locked away before exploration and used for a single final evaluation. Later analyses reuse those saved predictions, and nothing was tuned on it.
 
 **Models:** Logistic Regression, Decision Tree, Random Forest, XGBoost, plus a dummy baseline as the "no skill" reference.
 
@@ -113,6 +113,12 @@ requirements.txt       app dependencies
 requirements-dev.txt   tests, notebooks, data download
 ```
 
-## License
+## License and data credit
 
-Code is released under the MIT License. The dataset is governed by its own terms on the UCI page.
+Code is released under the MIT License.
+
+The dataset is by I-Cheng Yeh, licensed [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Changes made here: columns renamed, and a stratified 80/20 train/test split (`data/processed/`).
+
+> Yeh, I. (2009). Default of Credit Card Clients [Dataset]. UCI Machine Learning Repository. https://doi.org/10.24432/C55S3H
+
+Original study: Yeh, I. and Lien, C. (2009). The comparisons of data mining techniques for the predictive accuracy of probability of default of credit card clients. *Expert Systems with Applications*, 36(2), 2473-2480.
